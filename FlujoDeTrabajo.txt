@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clonar Repositorio') {
+            steps {
+                git 'https://usuario:contraseña@repositorio.git'
+            }
+        }
+
+        stage('Construir Aplicación') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('Ejecutar Pruebas') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Desplegar en Entorno de Pruebas') {
+            steps {
+                sh './scripts/desplegar_pruebas.sh'
+            }
+        }
+
+        stage('Desplegar en Producción') {
+            when {
+                expression { currentBuild.resultIsBetterOrEqualTo('UNSTABLE') }
+            }
+            steps {
+                script {
+                    // Llamada a la herramienta de liberación continua (si es necesario)
+                    sh './herramienta_liberacion_continua.sh'
+                    
+                    // Despliegue en producción
+                    sh './scripts/desplegar_produccion.sh'
+                }
+            }
+        }
+    }
+}

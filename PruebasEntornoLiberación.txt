@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Ejecutar pruebas unitarias
+./tests/unitarios.sh
+
+# Ejecutar pruebas de integración
+./tests/integracion.sh
+
+# Ejecutar pruebas de rendimiento
+./tests/rendimiento.sh

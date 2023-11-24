@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Crear red de Docker
+docker network create mi_red_docker
+
+# Crear contenedor de base de datos
+docker run --name mi_db_container -e MYSQL_ROOT_PASSWORD=mi_password -d --network=mi_red_docker mysql:latest
+
+# Crear contenedor de la aplicación
+docker run --name mi_app_container -p 8080:8080 -d --network=mi_red_docker mi_imagen_de_aplicacion:latest
